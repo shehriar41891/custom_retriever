@@ -1,0 +1,11 @@
+pandas
+tiktoken
+langchain-community
+langchain
+python-dotenv
+openai==0.28
+pinecone 
+scikit-learn
+llama-index
+crewai
+crewai_tools
