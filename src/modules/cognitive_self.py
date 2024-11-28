@@ -62,39 +62,19 @@ crew = Crew(
     max_iterations=2
 )
 
-spotifyQueries = [
-  "How do I get back into my account if I forgot the password?",
-  "Why isn’t my playlist showing up on my other devices?",
-  "How can I stop songs from playing automatically after my playlist ends?",
-  "Why do I keep hearing ads even though I paid for Premium?",
-  "How can I find songs I recently played?",
-  "What’s the easiest way to share a playlist with a friend?",
-  "How do I make my playlists private so no one can see them?",
-  "Why is my music stopping when I switch apps?",
-  "How do I save data when using Spotify on my phone?",
-  "Why can’t I find certain songs or albums?",
-  "What’s the deal with 'Spotify Wrapped'? How do I see mine?",
-  "How do I get better sound quality on my Spotify?",
-  "Can I play Spotify on my TV? How?",
-  "Why is the app asking me to update my payment info?",
-  "How do I add a new card for my subscription?",
-  "Why can’t I skip songs anymore?",
-  "How do I turn on shuffle?",
-]
-
 def get_result(user_query):
     result = crew.kickoff(inputs={'query' : user_query})
     return result 
 
 print(get_result('Where is my package? Can I track it in real-time?'))
 
-arr = []
-for query in spotifyQueries:
-    result = get_result(query)  # Get the result for the current query
-    if result and hasattr(result, 'raw'):# Check if result has a 'raw' attribute
-        arr.append(result.raw)  # Append only the 'raw' field to the array
+# arr = []
+# for query in spotifyQueries:
+#     result = get_result(query)  # Get the result for the current query
+#     if result and hasattr(result, 'raw'):# Check if result has a 'raw' attribute
+#         arr.append(result.raw)  # Append only the 'raw' field to the array
 
-print(arr)
+# print(arr)
 
 
 # print(arr)
