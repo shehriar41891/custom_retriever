@@ -53,8 +53,8 @@ def compute_cosine_similarity(subparts, query, embedding_function):
         list of tuple: A list of tuples where each tuple contains the subpart and its cosine similarity score.
     """
     # Generate embeddings for the subparts and the query
-    subpart_embeddings = [embedding_function(subpart) for subpart in subparts]
-    query_embedding = embedding_function(query)
+    subpart_embeddings = [embedding_function.get_embedding(subpart) for subpart in subparts]
+    query_embedding = embedding_function.get_embedding(query)
 
     # Ensure all embeddings have the same size
     max_length = max(len(vec) for vec in subpart_embeddings + [query_embedding])
@@ -73,26 +73,22 @@ def compute_cosine_similarity(subparts, query, embedding_function):
     return results
 
 
-# # Integrated Usage Example
-# if __name__ == "__main__":
-#     # Dummy embedding function (replace with an actual embedding generator)
-#     def dummy_embedding(text):
-#         return [ord(c) for c in text][:10]  # Mock embedding based on ASCII values (for demonstration)
-
-#     # Sample long text
-#     text = """Once past due, service can be disrupted. It's important to contact Financial 
-#     Services so a payment arrangement can be considered.
-#     """
+# Integrated Usage Example
+if __name__ == "__main__":
+    # Sample long text
+    text = """Once past due, service can be disrupted. It's important to contact Financial 
+    Services so a payment arrangement can be considered.
+    """
     
-#     # Query
-#     query = "What to do when service is disrupted?"
+    # Query
+    query = "What to do when service is disrupted?"
 
-#     # Step 1: Split the text into chunks
-#     chunks = split_text_by_words(text, chunk_size=14, chunk_overlap=4)
+    # Step 1: Split the text into chunks
+    chunks = split_text_by_words(text, chunk_size=14, chunk_overlap=4)
 
-#     # Step 2: Compute cosine similarity with the query
-#     results = compute_cosine_similarity(chunks, query, dummy_embedding)
+    # Step 2: Compute cosine similarity with the query
+    results = compute_cosine_similarity(chunks, query, embedding_function)
     
-#     # Output the results
-#     for subpart, similarity in results:
-#         print(f"Subpart: '{subpart}'\nSimilarity: {similarity:.4f}\n")
+    # Output the results
+    for subpart, similarity in results:
+        print(f"Subpart: '{subpart}'\nSimilarity: {similarity:.4f}\n")

@@ -1,17 +1,20 @@
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 import os
 from dotenv import load_dotenv
 
 def get_llm():
-    # load the environement variables
+    # Load the environment variables
     load_dotenv()
     # Retrieve OpenAI API key from environment variables
     openai_api_key = os.getenv("OPENAI_API")
     
-    print('The openai api key is ',openai_api_key)
-    """
-    Returns an instance of OpenAI's LLM initialized with Langchain.
-    """
+    print('The OpenAI API key is ', openai_api_key)
+    
     if not openai_api_key:
         raise EnvironmentError("OpenAI API key is not set in your environment variables.")
-    return OpenAI(model_name="gpt-3.5-turbo-0125", temperature=0.7,api_key=openai_api_key)
+    
+    # Return an instance of ChatOpenAI instead of OpenAI for chat models
+    return ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.7, api_key=openai_api_key)
+
+llm = get_llm()
+
