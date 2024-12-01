@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.embedding_model import get_embedding_model  # Replace with your actual embedding model import
 
 
+embedding_function = get_embedding_model() 
 def split_text_by_words(text, chunk_size, chunk_overlap=0):
     """
     Splits the input text into chunks of specified length based on words with optional overlap.
@@ -72,26 +73,26 @@ def compute_cosine_similarity(subparts, query, embedding_function):
     return results
 
 
-# Integrated Usage Example
-if __name__ == "__main__":
-    # Dummy embedding function (replace with an actual embedding generator)
-    def dummy_embedding(text):
-        return [ord(c) for c in text][:10]  # Mock embedding based on ASCII values (for demonstration)
+# # Integrated Usage Example
+# if __name__ == "__main__":
+#     # Dummy embedding function (replace with an actual embedding generator)
+#     def dummy_embedding(text):
+#         return [ord(c) for c in text][:10]  # Mock embedding based on ASCII values (for demonstration)
 
-    # Sample long text
-    text = """Once past due, service can be disrupted. It's important to contact Financial 
-    Services so a payment arrangement can be considered.
-    """
+#     # Sample long text
+#     text = """Once past due, service can be disrupted. It's important to contact Financial 
+#     Services so a payment arrangement can be considered.
+#     """
     
-    # Query
-    query = "What to do when service is disrupted?"
+#     # Query
+#     query = "What to do when service is disrupted?"
 
-    # Step 1: Split the text into chunks
-    chunks = split_text_by_words(text, chunk_size=14, chunk_overlap=4)
+#     # Step 1: Split the text into chunks
+#     chunks = split_text_by_words(text, chunk_size=14, chunk_overlap=4)
 
-    # Step 2: Compute cosine similarity with the query
-    results = compute_cosine_similarity(chunks, query, dummy_embedding)
+#     # Step 2: Compute cosine similarity with the query
+#     results = compute_cosine_similarity(chunks, query, dummy_embedding)
     
-    # Output the results
-    for subpart, similarity in results:
-        print(f"Subpart: '{subpart}'\nSimilarity: {similarity:.4f}\n")
+#     # Output the results
+#     for subpart, similarity in results:
+#         print(f"Subpart: '{subpart}'\nSimilarity: {similarity:.4f}\n")

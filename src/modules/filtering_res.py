@@ -1,59 +1,62 @@
 from crewai import Agent, Task, Crew, Process
-# from models.llm_model import get_llm
 from dotenv import load_dotenv
-import os 
+import os
 import litellm
 
-litellm.set_verbose=True
+# Enable verbose mode for LiteLLM
+litellm.set_verbose = True
 
+# Load environment variables
 load_dotenv()
-
 openai_api = os.getenv('OPENAI_API')
-# os.environ['OPENAI_API'] = openai_api
+
+os.environ['OPENAI_API_KEY'] = openai_api
 os.environ['MODEL_NAME'] = 'gpt-3.5-turbo'
 
+# Configure LiteLLM with API key
 litellm.api_key = openai_api
 
+# Define the evaluator agent
 Evaluator = Agent(
     role='Evaluation of the documents',
-    goal="""
-    Evaluate the given 10 documents {documents} based on the query: {query} and take the top 3 out of 
-    them which you think contain the answer to the query: {query}
-    """,
+    goal=(
+        "Evaluate the given 10 documents {documents} based on the query: {query} and "
+        "select the top 3 that most closely answer the query: {query}."
+    ),
     verbose=True,
     memory=True,
     backstory=(
-        """You are an document evaluator who looks carefully on the documents and query and take top 3
-        most matched documents with query"""
+        "You are a document evaluator who carefully analyzes documents and selects the "
+        "top 3 that are most relevant to the given query."
     ),
-    allow_delegation=True
+    allow_delegation=True,
 )
 
+# Define the evaluation task
 Evaluation = Task(
     description=(
-        """Analyze the documents {documents} based on the query {query}. Take top 3 documents
-        from given 10 documents which you think contains the answer to the {query}
-        rank them from most relevant to less relevant        
-        """
+        "Analyze the documents {documents} based on the query {query}. Select the top 3 documents "
+        "that are most relevant to the query and rank them from most to least relevant."
     ),
     expected_output="Top 3 relevant documents to the given query",
     agent=Evaluator,
-    allow_delegation=True
+    allow_delegation=True,
 )
 
+# Create the crew
 crew = Crew(
     agents=[Evaluator],
     tasks=[Evaluation],
     verbose=True,
     process=Process.sequential,
     debug=True,
-    max_iterations=2
+    max_iterations=2,
 )
 
-
-def filter_top3(user_query,documents):
-    result = crew.kickoff(inputs={'documents': documents,'query' : user_query})
-    return result 
+# Define a function to filter the top 3 documents
+def filter_top3(user_query, documents):
+    result = crew.kickoff(inputs={'documents': documents, 'query': user_query})
+    return result
 
 data = {'matches': [{'id': '158',
               'metadata': {'text': '@129336 Would you like me to look at your '
@@ -136,7 +139,3 @@ data = {'matches': [{'id': '158',
  }
 
 texts = [match['metadata']['text'] for match in data['matches']]
-
-query = 'How can I check my data usage and remaining balance'
-
-print(filter_top3(query,texts))

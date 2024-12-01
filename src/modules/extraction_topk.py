@@ -66,6 +66,3 @@ def query_data(query: str, namespace: str = "namespace6", top_k: int = 10):
     except Exception as e:
         raise RuntimeError(f"An error occurred while querying the database: {e}")
 
-
-result = query_data('How can I check my data usage and remaining balance')
-print(result)

@@ -1,6 +1,6 @@
 import os
 from typing import List
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file
@@ -14,25 +14,18 @@ class OpenAIEmbedding:
     A wrapper class for generating embeddings using OpenAI's API.
     """
 
-    def __init__(self, model: str = "text-embedding-ada-002", max_retries: int = 3):
+    def __init__(self, model: str = "text-embedding-3-small"):
         """
-        Initializes the OpenAI embedding model.
+        Initializes the OpenAI client and model.
 
         Args:
-            model (str): The OpenAI embedding model to use. Default is 'text-embedding-ada-002'.
-            max_retries (int): Maximum number of retries for API calls. Default is 3.
-        """
-        self.model = model
-        self.max_retries = max_retries
-        self._validate_api_key()
-
-    def _validate_api_key(self):
-        """
-        Validates that the OpenAI API key is set in the environment variables.
+            model (str): The OpenAI embedding model to use. Default is 'text-embedding-3-small'.
         """
         if not openai_api_key:
             raise EnvironmentError("OpenAI API key not found. Please set it in your environment variables.")
-        openai.api_key = openai_api_key  # Set the API key for OpenAI
+        
+        self.client = OpenAI(api_key=openai_api_key)
+        self.model = model
 
     def get_embedding(self, text: str) -> List[float]:
         """
@@ -44,27 +37,9 @@ class OpenAIEmbedding:
         Returns:
             List[float]: A list of float values representing the embedding.
         """
-        for attempt in range(self.max_retries):
-            try:
-                response = openai.Embedding.create(input=text, model=self.model)
-                return response["data"][0]["embedding"]
-            except Exception as e:
-                if attempt < self.max_retries - 1:
-                    print(f"Error generating embedding. Retrying... ({attempt + 1}/{self.max_retries})")
-                else:
-                    raise RuntimeError(f"Failed to generate embedding after {self.max_retries} attempts. Error: {e}")
-
-    def get_embeddings(self, texts: List[str]) -> List[List[float]]:
-        """
-        Generates embeddings for a list of texts.
-
-        Args:
-            texts (List[str]): List of input texts to embed.
-
-        Returns:
-            List[List[float]]: A list of embeddings, each corresponding to an input text.
-        """
-        return [self.get_embedding(text) for text in texts]
+        text = text.replace("\n", " ")  # Replace newlines with spaces
+        response = self.client.embeddings.create(input=[text], model=self.model)
+        return response.data[0].embedding
 
 def get_embedding_model() -> OpenAIEmbedding:
     """

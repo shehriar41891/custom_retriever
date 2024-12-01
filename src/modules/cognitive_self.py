@@ -1,5 +1,5 @@
 from crewai import Agent, Task, Crew, Process
-from model.llm_model import get_llm
+from models.llm_model import get_llm
 from dotenv import load_dotenv
 import os 
 import litellm
@@ -31,11 +31,10 @@ Knowledge_Confidence_Evaluator = Agent(
     verbose=True,
     memory=True,
     backstory=(
-        """You must answer only if you are 100% confident. If unsure, respond with 'Not sure'.
-        Follow this format when providing your response:
-
-        Thought: [Your reasoning or confidence assessment]
-        Final Answer: [Your best complete final answer]"""
+        """
+        You are a query Evaluator who is expert in answering 'sure' or 'not sure' based on the query 
+        and your knowledge
+        """
     ),
     allow_delegation=True
 )
@@ -44,9 +43,7 @@ ConfidenceEvaluation = Task(
     description=(
         """Analyze the query {query}. Answer only if you are 100% sure. 
         If you are unsure, respond with 'Not sure'. Follow this format:
-        
-        Thought: I now can give a great answer
-        Final Answer: [your final answer here]"""
+        """
     ),
     expected_output="A precise and accurate answer or 'Not sure' if you are not 100% confident, using the correct format.",
     agent=Knowledge_Confidence_Evaluator,
@@ -65,16 +62,3 @@ crew = Crew(
 def get_result(user_query):
     result = crew.kickoff(inputs={'query' : user_query})
     return result 
-
-print(get_result('Where is my package? Can I track it in real-time?'))
-
-# arr = []
-# for query in spotifyQueries:
-#     result = get_result(query)  # Get the result for the current query
-#     if result and hasattr(result, 'raw'):# Check if result has a 'raw' attribute
-#         arr.append(result.raw)  # Append only the 'raw' field to the array
-
-# print(arr)
-
-
-# print(arr)
