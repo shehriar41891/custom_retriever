@@ -16,8 +16,22 @@ questions = [
     "Do you guys offer preowned phone?",
     "How can I check my device is approved device?",
     "Do you guys have pre-owned phone for sale",
-    "I got problem with cards"
-    
+    "I got problem with cards",
+    "Do you offer data Plan for Europe?",
+    "Which area has enhanced calling?",
+    "Is there any recent update of Samsung",
+    "Can I file an issue thirough Device Protection",
+    "Do you guys have a switcher offer right now",
+    "Can you walk us through Data speed is this reduced?",
+    "When software update will be announced?",
+    "How can we powers off this phone?",
+    "Is Device protection service free",
+    "How to contact the sales?",
+    "Do you have any PIN codes to unlock the device",
+    "Do guys support the GPS+cellular version",
+    "Where can we review switcher offer",
+    "How can we identify partner coverage",
+    "Where we can contact Solutions Team"
 ]
 
 answers = [
@@ -26,7 +40,22 @@ answers = [
     "Yes we do offer preowned phone you can visit our website http:/preowned.com",
     "To check whether your phone is approved we recommend you to visiting retail for activation",
     "We do have pre-owned phones and other items for sales",
-    "The cards are non refundable. Do you mind sending me your email so I can check"
+    "The cards are non refundable. Do you mind sending me your email so I can check",
+    "We do offer data plan for Europe at $35 for 50MB",
+    "The enhanced calling is available in the Iowa area",
+    "Samsung has not announced any recent update",
+    "Filing an issue through Device protection is the cheapest option I would not recommend you",
+    "Yes we do have a switcher offer right now for 65 bucks",
+    "Data speed is reduced after 22GBs on our unlimited plans",
+    "A software update will be released beginning tomorrow",
+    "Hold both volumn down button and power off button for a while",
+    "Device protection + is a service that protects your phone",
+    "Sales can be contacted at 888-289-8722.",
+    "I recommend searching google for information because we do not have any PIN codes to unlock the device.",
+    "We do not support the GPS+cellular version right now",
+    "You can review switcher offer https://t.co/ud8X6C9lKx",
+    "If you select voice and zoom in you will see grid lines through the state of Michigan. This means it is partner coverage.",
+    "You can speak with our Solutions Team at 888-944-9400 to assist with this."
 ]
 
 print(len(questions),len(answers))

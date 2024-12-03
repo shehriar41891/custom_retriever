@@ -9,3 +9,4 @@ scikit-learn
 llama-index
 crewai
 crewai_tools
+nltk
