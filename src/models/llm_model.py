@@ -7,9 +7,7 @@ def get_llm():
     load_dotenv()
     # Retrieve OpenAI API key from environment variables
     openai_api_key = os.getenv("OPENAI_API")
-    
-    print('The OpenAI API key is ', openai_api_key)
-    
+        
     if not openai_api_key:
         raise EnvironmentError("OpenAI API key is not set in your environment variables.")
     

@@ -6,6 +6,10 @@ from models.llm_model import get_llm
 # from test.queries_answer import questions, answers
 from config.combined import process_query
 from modules.extraction_topk import query_data
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.ticker import MaxNLocator
+
 
 # Load the pre-trained Sentence-BERT model
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -100,7 +104,8 @@ prompt_template = """
     """
     
 
-def blue_score_special_Arch():
+semantic_score_special_arch_scores = []
+def semantic_score_special_Arch():
         # Step: Calculate BLEU score for the generated response
     cosine_similarities = 0
     for i, q in enumerate(questions):
@@ -130,15 +135,17 @@ def blue_score_special_Arch():
         cosine_similarity = calculate_semantic_similarity(reference_answer, generated_answer.content)
         # Print the BLEU score for the current question
         print(f"BLEU score for Question {i+1}: {cosine_similarity:.4f}")
+        semantic_score_special_arch_scores.append(cosine_similarity)
         
         cosine_similarities = cosine_similarities + cosine_similarity
     
-    return cosine_similarities/6
+    return cosine_similarities/21
         
 
-print('The average cosine similarity is',blue_score_special_Arch())
+print('The average cosine similarity is',semantic_score_special_Arch())
 
-def blue_score_rag():
+semantic_gpt_score = []
+def semantic_score_rag():
     cosine_similarities = 0
     for i,q in enumerate(questions):
         generated_context = query_data(q)
@@ -170,9 +177,42 @@ def blue_score_rag():
         cosine_similarity = calculate_semantic_similarity(reference_answer, generated_answer.content)
         # Print the BLEU score for the current question
         print(f"BLEU score for Question {i+1}: {cosine_similarity:.4f}")
+        semantic_gpt_score.append(cosine_similarity)
         
         cosine_similarities = cosine_similarities + cosine_similarity
     
-    return cosine_similarities/6
+    return cosine_similarities/21
 
-print('The averge cosine similarity using pure RAG is',blue_score_rag())
+print('The averge cosine similarity using pure RAG is',semantic_score_rag())
+
+
+eval_folder = "eval"
+os.makedirs(eval_folder, exist_ok=True)
+
+# Example data for demonstration
+questions_indices = list(range(1, 22))
+
+# Plot: Comparison of Average Scores
+plt.figure(figsize=(8, 5))
+methods = ["Special Arch", "GPT"]
+avg_scores = [sum(semantic_score_special_arch_scores) / len(semantic_score_special_arch_scores),
+              sum(semantic_gpt_score) / len(semantic_gpt_score)]
+plt.bar(methods, avg_scores, color=['blue', 'green'])
+plt.title("Average Cosine Similarity Comparison")
+plt.ylabel("Cosine Similarity")
+plt.savefig(os.path.join(eval_folder, "average_scores_comparison.png"))
+plt.close()
+
+# Plot: Per-Question Performance
+plt.figure(figsize=(12, 6))
+plt.plot(questions_indices, semantic_score_special_arch_scores, marker='o', label="Special Arch", color='blue')
+plt.plot(questions_indices, semantic_gpt_score, marker='s', label="GPT", color='green')
+plt.title("Cosine Similarity Per Question")
+plt.xlabel("Question Index")
+plt.ylabel("Cosine Similarity")
+plt.legend()
+plt.grid(True)
+plt.savefig(os.path.join(eval_folder, "per_question_performance.png"))
+plt.close()
+
+os.listdir(eval_folder)  # To confirm the files are saved in the eval folder

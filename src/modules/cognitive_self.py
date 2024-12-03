@@ -15,8 +15,6 @@ os.environ['MODEL_NAME'] = 'gpt-3.5-turbo'
 
 litellm.api_key = openai_api
 
-print(openai_api)
-
 # llm = get_llm()
 # print('The llm from cognitive side is ',llm)
 
